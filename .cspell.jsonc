@@ -7,6 +7,7 @@
     ".venv/**/*",
     "bazel-*/**/*",
     "coverage.xml",
+    "go.sum",
     "LICENSE",
     "MODULE.bazel.lock",
     "mise.lock",
@@ -21,5 +22,5 @@
       "addWords": true
     }
   ],
-  "dictionaries": ["afenc", "python"]
+  "dictionaries": ["afenc", "golang", "python"]
 }

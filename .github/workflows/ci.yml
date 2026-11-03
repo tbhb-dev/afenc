@@ -32,6 +32,17 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-24.04, ubuntu-24.04-arm, macos-15, windows-2025]
+        include:
+          - os: ubuntu-24.04
+            release: release
+          - os: ubuntu-24.04-arm
+            release: release
+          - os: macos-15
+            release: release
+          # Bazel runs the workspace status command without a shell on
+          # Windows, so the release config there uses the batch script.
+          - os: windows-2025
+            release: release-windows
     defaults:
       run:
         shell: bash
@@ -43,10 +54,13 @@ jobs:
         with:
           egress-policy: audit
 
+      # Full history: the release build stamps the version through
+      # `git describe`.
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         with:
           persist-credentials: false
+          fetch-depth: 0
 
       # On Windows the rules' scripts run under the shell toolchain's Bash,
       # MSYS2's on the hosted image. Only there: elsewhere Bazel would run
@@ -77,9 +91,10 @@ jobs:
         if: runner.os == 'Windows'
         run: reg add 'HKLM\SYSTEM\CurrentControlSet\Control\FileSystem' //v LongPathsEnabled //t REG_DWORD //d 1 //f
 
-      # Fetching hits PyPI, GitHub and the BCR mirror, which can fail for
-      # longer than Bazel's own download retries wait. Only the fetch is
-      # retried: a test failure never is.
+      # Fetching hits go.dev's release list (go_sdk.from_file), PyPI, GitHub
+      # and the BCR mirror, which can fail for longer than Bazel's own
+      # download retries wait. Only the fetch is retried: a test failure never
+      # is.
       - name: Fetch, retrying transient failures
         run: |
           for attempt in 1 2 3; do
@@ -91,10 +106,16 @@ jobs:
       # //... is every hermetic gate: the whole-tree lint tests (secrets in
       # the working tree, YAML, TOML, Markdown, prose, EditorConfig,
       # workflows, shell, CODEOWNERS paths), the format check, Starlark
-      # lint, the docs bundle and REUSE checks, and the preset staleness
-      # test.
+      # lint, nogo during the build, the Go and Python tests and linters,
+      # the coverage floor, the docs bundle and REUSE checks, the import
+      # contracts, and the preset staleness test.
       - name: Test
         run: bazelisk test --config=ci //...
+
+      - name: Build the release binary
+        env:
+          RELEASE_CONFIG: ${{ matrix.release }}
+        run: bazelisk build "--config=${RELEASE_CONFIG}" //cmd/afenc
 
       # A failed run's test logs, so a failure that does not recur can still
       # be read.
@@ -132,6 +153,9 @@ jobs:
           bazelisk-cache: true
           repository-cache: true
           cache-save: false
+
+      - name: Check that gazelle has nothing to change
+        run: bazelisk run //:gazelle -- -mode=diff
 
       - name: Check that MODULE.bazel is tidy
         run: |
