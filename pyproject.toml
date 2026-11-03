@@ -1,11 +1,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright Tony Burns
 
-# Repo-level Python toolchain. This repository is a Rust project; the
-# Python here is the interim agent tooling under tools/interim, and this file
-# pins what those scripts need at runtime. `package = false` keeps the root
-# virtual: uv syncs the dependency groups into .venv without trying to build
-# the root.
+# Repo-level Python toolchain. This repository is primarily Go; the Python
+# here is the interim agent tooling under tools/interim, and this file pins
+# what those scripts need at runtime. `package = false` keeps the root virtual: uv syncs the
+# dependency groups into .venv without trying to build the root.
 [project]
 name = "afenc-workspace"
 # Inert. Nothing builds or publishes from this table.

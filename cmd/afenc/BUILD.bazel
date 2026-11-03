@@ -1,0 +1,32 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright Tony Burns
+
+load("@rules_go//go:def.bzl", "go_binary", "go_library", "go_test")
+load("@tbhb_rules//repo:defs.bzl", "repo_files")
+
+repo_files()
+
+go_library(
+    name = "afenc_lib",
+    srcs = ["main.go"],
+    importpath = "go.tbhb.dev/afenc/cmd/afenc",
+    visibility = ["//visibility:private"],
+    deps = [
+        "//internal/buildmeta",
+        "@com_github_spf13_cobra//:cobra",
+    ],
+)
+
+go_binary(
+    name = "afenc",
+    embed = [":afenc_lib"],
+    visibility = ["//visibility:public"],
+)
+
+go_test(
+    name = "afenc_test",
+    srcs = ["main_internal_test.go"],
+    embed = [":afenc_lib"],
+    # The whole-module Go checks in the root package take the tests too.
+    visibility = ["//:__pkg__"],
+)
