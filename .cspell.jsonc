@@ -16,10 +16,10 @@
   ],
   "dictionaryDefinitions": [
     {
-      "name": "project",
+      "name": "afenc",
       "path": "./.cspell-words.txt",
       "addWords": true
     }
   ],
-  "dictionaries": ["project", "python"]
+  "dictionaries": ["afenc", "python"]
 }

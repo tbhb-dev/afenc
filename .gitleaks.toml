@@ -19,7 +19,6 @@ paths = [
   '''^\.vale/(Google|write-good|proselint|ai-tells[^/]*)/''',
   '''^tmp/''',
   '''^\.worktrees/''',
-  '''^mutants/''',
   '''(^|/)__pycache__/''',
   '''^\.(ruff|pytest|hypothesis|rumdl)_cache/''',
 ]

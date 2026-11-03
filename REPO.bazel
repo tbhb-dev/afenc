@@ -2,7 +2,7 @@
 # Copyright Tony Burns
 
 # Directories that hold no source of this repository: VCS metadata, Python
-# environments, tool caches, agent worktrees, mutation output and scratch
+# environments, tool caches, agent worktrees and scratch
 # work. Ignoring them keeps them out of every package and every glob, so the
 # whole-tree checks (//:repo_files) never scan them.
 ignore_directories([
@@ -11,7 +11,6 @@ ignore_directories([
     ".bazel_env",
     ".mise",
     ".venv",
-    "mutants",
     "tmp",
     ".worktrees",
     "**/__pycache__",
