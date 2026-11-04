@@ -59,6 +59,7 @@ gomutants
 goproxy
 gosec
 govet
+govulncheck
 gpgsign
 hardwrap
 heapdump
@@ -115,6 +116,7 @@ runfile
 runfiles
 rylignore
 sandboxed
+SARIF
 sess
 sessionstart
 setlocal
