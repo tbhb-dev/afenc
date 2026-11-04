@@ -43,6 +43,7 @@ fsfe
 funlen
 genrule
 getpid
+gobco
 gochecknoglobals
 gochecksumtype
 gocognit
