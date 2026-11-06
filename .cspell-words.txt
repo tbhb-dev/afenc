@@ -136,6 +136,7 @@ subtests
 surrogateescape
 takewhile
 tbhb
+tbhbdev
 testdata
 testifylint
 testonly
